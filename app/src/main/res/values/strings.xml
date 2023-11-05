@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">UWBTestAssessment</string>
+    <string name="uwb_implementation">UWB Implementation</string>
+    <string name="scan_devices">Scan Devices</string>
+    <string name="please_turn_on_bluetooth">Please turn on your bluetooth.</string>
+    <string name="permission_denied">Permission denied</string>
+</resources>
