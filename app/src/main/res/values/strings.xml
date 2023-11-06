@@ -4,4 +4,6 @@
     <string name="scan_devices">Scan Devices</string>
     <string name="please_turn_on_bluetooth">Please turn on your bluetooth.</string>
     <string name="permission_denied">Permission denied</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connect_fail">Connect Fail</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.uwbtestassessment.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.uwb.UwbAddress
 import androidx.recyclerview.widget.RecyclerView
 import com.clj.fastble.BleManager
 import com.clj.fastble.data.BleDevice
@@ -10,22 +11,23 @@ import com.example.uwbtestassessment.helpers.UwbBleDevice
 
 typealias DeviceCallBack = (UwbBleDevice) -> Unit
 
-class FoundedDevicesAdapter : RecyclerView.Adapter<FoundedDevicesAdapter.DeviceHolder>() {
+class FoundedDevicesAdapter(private val deviceCallBack: DeviceCallBack) : RecyclerView.Adapter<FoundedDevicesAdapter.DeviceHolder>() {
+
+    interface OnDeviceClickListener {
+        fun onConnect(bleDevice: UwbBleDevice?)
+        fun onDisConnect(bleDevice: UwbBleDevice?) //void onDetail(UwbBleDevice bleDevice);
+    }
 
     private val list = ArrayList<UwbBleDevice>()
+    private var mListener: FoundedDevicesAdapter.OnDeviceClickListener? = null
 
     inner class DeviceHolder(private val binding: CusDeviceAdpaterItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: UwbBleDevice) {
-
-
-//            binding.ivLargeImage.setOnClickListener {
-//                handleProductClick(item.largeImageURL)
-//            }
-        }
-
-        private fun handleProductClick(largeImageURL: String?) {
-
+            binding.tvDeviceName.text = item.bleDev.name
+            binding.tvDeviceName.setOnClickListener {
+                deviceCallBack(item)
+            }
         }
     }
 
@@ -88,6 +90,10 @@ class FoundedDevicesAdapter : RecyclerView.Adapter<FoundedDevicesAdapter.DeviceH
         }
     }
 
+    fun setOnDeviceClickListener(listener: OnDeviceClickListener) {
+        this.mListener = listener
+    }
+
     fun clearScanDevice() {
         if (list.isNotEmpty()) {
             for (i in list.indices) {
@@ -98,5 +104,16 @@ class FoundedDevicesAdapter : RecyclerView.Adapter<FoundedDevicesAdapter.DeviceH
             }
             notifyDataSetChanged()
         }
+    }
+
+    fun findByUwbAddr(addr: UwbAddress?): UwbBleDevice? {
+        for (i in list.indices) {
+            val myaddr: UwbAddress = list[i].uwbDevAddr
+            //BleDevice device = bleDeviceList.get(i).bleDev;
+            if (myaddr != null && myaddr == addr) {
+                return list.get(i)
+            }
+        }
+        return null
     }
 }
